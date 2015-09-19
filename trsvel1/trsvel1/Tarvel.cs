@@ -6,35 +6,51 @@ using System.Threading.Tasks;
 
 namespace travel
 {
-    class Node
+    public class Node
     {
-        string name;
-        TimeSpan deftime;
+        public string name;
+        public int id;
+        public TimeSpan deftime;
 
-        Link[] links;
-
-    }
-    class Link
-    {
-        string name;
-        float cost;
-        TimeSpan deftime;
-        Node[] nodes=new Node[2];
-    }
-    class City:Node
-    {
-           bool stayed;
-    }
-    class Resort : Node
-    {
-    }
-
-    class Highway : Link
-    {
+        //public Link[] links;
 
     }
-    class Road : Link
-    {
+    //public class Link
+    //{
+    //    string name;
+    //    float cost;
+    //    TimeSpan deftime;
+    //    Node[] nodes=new Node[2];
+    //}
 
+
+
+    public class City:Node
+    {
+        bool isLarge;
+        bool isStayed;
+        public City()
+        {
+        }
+        public City(int i,string name,bool isLarge)
+        {
+            id = i;
+            this.name = name;
+            this.isLarge = isLarge;
+            isStayed = false;
+        }
     }
+    public class Resort : Node
+    {
+        public List<City> CityNear=new List<City>();
+        public List<double> CityNearTime= new List<double>();
+    }
+
+//    public class Highway : Link
+//    { }
+
+//public class Road : Link
+//    {
+
+//    }
 }
