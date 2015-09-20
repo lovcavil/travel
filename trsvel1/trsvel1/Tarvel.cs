@@ -26,8 +26,9 @@ namespace travel
 
     public class City: Node,IEquatable<City>
     {
-        bool isLarge;
+        public bool isLarge;
         bool isStayed;
+        public bool isDummy=false;
         public City()
         {
         }

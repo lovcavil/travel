@@ -18,6 +18,8 @@ namespace travel
         
         public State currentState;
         List<Act> pastActs=new List<Act>();
+        public int alldaypass = 0;
+        public Node root = new Node();
         public void showpastActs()
         {
             foreach(Act act in pastActs)
@@ -25,6 +27,14 @@ namespace travel
                 Console.WriteLine(act.ToString());
             }
         }
+        public void showpastActs(System.IO.StreamWriter file)
+        {
+            foreach (Act act in pastActs)
+            {
+                file.WriteLine(act.ToString());
+            }
+        }
+
 
         public State Travel(State initialState, Node destination)
         {
@@ -33,7 +43,7 @@ namespace travel
             State temp = new State(initialState);
             while (temp.Location!= destination)
             {
-                temp.SetPossbileAct(destination);
+                temp.SetPossbileAct(root,destination);
                 TimeSpan optm = TimeSpan.FromHours(999);
                 Act optmA=new Act();
                 List<City> cityNeardestination=new List<City>();
@@ -52,7 +62,7 @@ namespace travel
                     if(destination is Resort)
                     {
                         Resort r = (Resort)destination;
-                        addition = r.CityNearTime.ElementAt(r.CityNear.LastIndexOf(cityNear));
+                        addition = r.CityNearTime.ElementAt(r.CityNear.IndexOf(cityNear));
                     }
                     foreach (Act act in temp.possbileAct)
                     {
@@ -81,6 +91,7 @@ namespace travel
                 }
 
             }
+            
             currentState = temp;
             return temp;
         }
@@ -90,14 +101,18 @@ namespace travel
             State result = new State(temp);
             result = result.Run(act);
             pastActs.Add(act);
+            if (act.daypass == 1)
+            {
+                alldaypass += 1;
+            }
             return result;
         }
 
-        public double Length(Node a,Node b,Act act)
-        {
-            double result = 1;
-            return result;
-        }
+        //public double Length(Node a,Node b,Act act)
+        //{
+        //    double result = 1;
+        //    return result;
+        //}
 
         static public double Length(Node a, Node b)
         {
@@ -106,6 +121,7 @@ namespace travel
         }
         public TravelPlan(Node root)
         {
+            this.root = root;
             currentState = new State(root);
         }
 
@@ -133,6 +149,10 @@ namespace travel
             timeLeft = cpy.timeLeft;
         }
 
+        public override string ToString()
+        {
+            return "at"+Location.name+",allready"+day+"day,"+"today"+timeLeft.ToString()+"left";
+        }
 
         public State Run(Act act)
         {
@@ -145,34 +165,44 @@ namespace travel
             {
                 result.day += 1;
                 result.timeLeft = TimeSpan.FromHours(12);
+                
             }
             return result;
         }
 
-        public void SetPossbileAct(Node destination)
+        public void SetPossbileAct(Node root,Node destination)
         {
             possbileAct.Clear();
+            Node des = destination;
+            if(des is City)
+            {
+                var c = (City)des;
+                if(c.isDummy == true)
+                {
+                    des = root;
+                }
+            }
             if(this.Location is Resort)
             {
                 Resort r = (Resort)this.Location;
                 foreach (City city in r.CityNear)
                 {
-                    possbileAct.Add(new Act(this.Location, city, 0, r.CityNearTime.ElementAt(r.CityNear.LastIndexOf(city))));
+                    possbileAct.Add(new Act(this.Location, city, 0, r.CityNearTime.ElementAt(r.CityNear.IndexOf(city))));
 
                 }
                 return;
             }
 
-            if (destination is Resort)
+            if (des is Resort)
             {
-                Resort r = (Resort)destination;
+                Resort r = (Resort)des;
                 if(r.CityNear.Contains(this.Location))
                 {
-                    TimeSpan timetrans = r.CityNearTime.ElementAt(r.CityNear.LastIndexOf((City)this.Location));
+                    TimeSpan timetrans = r.CityNearTime.ElementAt(r.CityNear.IndexOf((City)this.Location));
                     var timecompare = timetrans + timetrans + r.test;
                     if (this.timeLeft >= timecompare)
                     {
-                        possbileAct.Add(new Act(this.Location, destination, 0, timetrans));
+                        possbileAct.Add(new Act(this.Location, des, 0, timetrans));
                     }
                     else
                     {
@@ -182,7 +212,7 @@ namespace travel
                 }
             }
 
-            foreach (City to in Program.city)
+            foreach (City to in Program.cities)
             {
                 if (to != null &&to.id>0&&to!=this.Location)
                 {
@@ -190,8 +220,8 @@ namespace travel
                     if (this.timeLeft >= timecost)
                     {
                         possbileAct.Add(new Act(this.Location, to, 1, timecost));
-                        bool a = (to.id == destination.id);
-                        if (a)
+                        bool a = (to.id == des.id);
+                        if (a)///neng dao zhi jie dao
                         {
                             possbileAct.Clear();
                             possbileAct.Add(new Act(this.Location, to, 0, timecost));
