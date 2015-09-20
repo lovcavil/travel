@@ -10,7 +10,6 @@ namespace travel
     {
         public string name;
         public int id;
-        public TimeSpan deftime;
 
         //public Link[] links;
 
@@ -25,7 +24,7 @@ namespace travel
 
 
 
-    public class City:Node
+    public class City: Node,IEquatable<City>
     {
         bool isLarge;
         bool isStayed;
@@ -39,18 +38,26 @@ namespace travel
             this.isLarge = isLarge;
             isStayed = false;
         }
+
+        public bool Equals(City other)
+        {
+            return (this.id == other.id);
+        
+        }
     }
     public class Resort : Node
     {
         public List<City> CityNear=new List<City>();
-        public List<double> CityNearTime= new List<double>();
+        public List<TimeSpan> CityNearTime= new List<TimeSpan>();
+        public TimeSpan deftime;
+        public TimeSpan test;
     }
 
-//    public class Highway : Link
-//    { }
+    //    public class Highway : Link
+    //    { }
 
-//public class Road : Link
-//    {
+    //public class Road : Link
+    //    {
 
-//    }
+    //    }
 }

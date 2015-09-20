@@ -24,6 +24,9 @@ namespace travel
 
             var tp = new TravelPlan(city[1]);
             tp.Travel(tp.currentState, resort[20]);
+            tp.Travel(tp.currentState, resort[2]);
+            tp.showpastActs();
+            ;
         }
 
         static public void ReadCity()
@@ -98,12 +101,34 @@ namespace travel
                     resort[counter] = new Resort();
                     resort[counter].id=uid;
                     resort[counter].name = array[0];
+                    double t=0;
+                    if (array[1] == "半天")
+                    {
+                        t = 0.5;
+                        resort[counter].deftime = TimeSpan.FromHours(t * 8);
+
+                    }
+                    if (array[1] == "一天")
+                    {
+                        t = 1;
+                        resort[counter].deftime = TimeSpan.FromHours(t * 8);
+
+                    }
+                    resort[counter].test = resort[counter].deftime;
+                    if (array[1] == "两天")
+                    {
+                        t = 2;
+                        resort[counter].deftime = TimeSpan.FromHours(t * 8);
+                        t = 1;
+                        resort[counter].test = TimeSpan.FromHours(t * 8);
+                    }
+                    
                     if (array[2] != "")
                     {
                         resort[counter].CityNear.Add(city[Array.LastIndexOf(Name, array[2])]);
                         double i = 0;
                         double.TryParse(array[3], out i);
-                        resort[counter].CityNearTime.Add(i);
+                        resort[counter].CityNearTime.Add(TimeSpan.FromHours(i));
                     }
                     if (array[4] != "")
                     {
@@ -111,7 +136,7 @@ namespace travel
                         double i = 0;
                         if (double.TryParse(array[5], out i))
                         {
-                            resort[counter].CityNearTime.Add(i);
+                            resort[counter].CityNearTime.Add(TimeSpan.FromHours(i ));
                         }
                     }
                     if (array[6] != "")
@@ -120,7 +145,7 @@ namespace travel
                         double i = 0;
                         if (double.TryParse(array[7], out i))
                         {
-                            resort[counter].CityNearTime.Add(i);
+                            resort[counter].CityNearTime.Add(TimeSpan.FromHours(i));
                         }
                     }
 
