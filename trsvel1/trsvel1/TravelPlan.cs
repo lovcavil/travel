@@ -42,7 +42,7 @@ namespace travel
 
             State temp = new State(initialState);
 
-            if(temp.Location == destination)
+            if(temp.Location == destination&&destination ==root)
             {
                 pastActs.Add(new Act(root, root, 1, new TimeSpan()));
                 temp.day = 1;
@@ -53,17 +53,25 @@ namespace travel
 
             while (temp.Location!= destination)
             {
-                if (alldaypass > 400)
+                ///debug
+                if (this.pastActs.Count > 0)
                 {
-                    ;
+                    if (this.pastActs.Last().daypass > 2)
+                    {  temp.day = 16;
+                    currentState.day = 16;
+                    currentState = temp;
+                    return temp;
                 }
-                    if (alldaypass > 500)
+                }
+
+                if (alldaypass > 500)
                 {
                     temp.day = 16;
                     currentState.day = 16;
                     currentState = temp;
                     return temp;
                 }
+
                 temp.SetPossbileAct(root,destination);
                 TimeSpan optm = TimeSpan.FromHours(999);
                 Act optmA=new Act();
@@ -125,9 +133,7 @@ namespace travel
                     }
 
 
-                    if (destination is Resort
-     &&                    temp.Location is City
-                        )
+                    if (destination is Resort  &&  temp.Location is City)
                     {
                         foreach (City cityNear in cityNeardestination)
                         {
@@ -158,17 +164,18 @@ namespace travel
 
                 if (optmA.timecost >= TimeSpan.FromHours(8))
                 {
-                    optmA = new Act(optmA.from, optmCity, 1, optmA.timecost - TimeSpan.FromHours(8));
+                    optmA = new Act(optmA.from, optmA.to, optmA.daypass+1, optmA.timecost - TimeSpan.FromHours(8));
                 }
                 if (optmA.timecost >= TimeSpan.FromHours(8))
                 {
-                    optmA = new Act(optmA.from, optmCity, optmA.daypass+1, optmA.timecost - TimeSpan.FromHours(8));
+                    optmA = new Act(optmA.from, optmA.to, optmA.daypass+1, optmA.timecost - TimeSpan.FromHours(8));
                 }
 
                 if (temp.Location is City && destination is Resort&& temp.Run(optmA).Location is City && temp.Run(temp.possbileAct.First()).Location != destination)
                 {
                     var r = (Resort)destination;
                     int better = 0;
+                    Node bestD = optmA.to;
                     double record;
                     foreach (City c in r.CityNear)
                     {
@@ -181,7 +188,7 @@ namespace travel
                     }
                     if (better==0) {
                         TimeSpan best=new TimeSpan();
-                        Node bestD=optmA.to  ;
+                        
                         TimeSpan compare;
                         foreach (City c in r.CityNear)
                         {
@@ -200,7 +207,7 @@ namespace travel
                         }
 
 
-                        optmA = new Act(optmA.from, destination, 1, TimeSpan.FromHours(Length(temp.Location, bestD) / 90) - TimeSpan.FromHours(8));
+                        optmA = new Act(optmA.from, bestD, optmA.daypass, TimeSpan.FromHours(Length(temp.Location, bestD) / 90) );
                     }
                 }
 
@@ -209,6 +216,14 @@ namespace travel
                     if (Length(temp.Run(optmA).Location, destination) > Length(temp.Location, destination))
                     {
                         optmA = new Act(optmA.from, destination, 1, TimeSpan.FromHours(Length(temp.Location, destination)/90) - TimeSpan.FromHours(8));
+                        if (optmA.timecost >= TimeSpan.FromHours(8))
+                        {
+                            optmA = new Act(optmA.from, destination, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                        }
+                        if (optmA.timecost >= TimeSpan.FromHours(8))
+                        {
+                            optmA = new Act(optmA.from, destination, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                        }
                     }
 
                 }
@@ -220,6 +235,15 @@ namespace travel
                     //temp = Apply(temp, optmA);
                     //currentState = temp;
                     //return temp;
+                }
+
+                if (optmA.timecost >= TimeSpan.FromHours(8))
+                {
+                    optmA = new Act(optmA.from, optmA.to, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                }
+                if (optmA.timecost >= TimeSpan.FromHours(8))
+                {
+                    optmA = new Act(optmA.from, optmA.to, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
                 }
 
                 temp = Apply(temp,optmA);
@@ -406,7 +430,17 @@ namespace travel
             if (possbileAct.Count == 0&& destination is City)
             {
                 TimeSpan timecost = TimeSpan.FromHours(TravelPlan.Length(this.Location, destination) / 90);
-                possbileAct.Add(new Act(this.Location, destination, 1, timecost- TimeSpan.FromHours(8)));
+                var optmA = new Act(this.Location, destination, 1, timecost - TimeSpan.FromHours(8));
+                if (optmA.timecost >= TimeSpan.FromHours(8))
+                {
+                    optmA = new Act(optmA.from, destination, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                }
+                if (optmA.timecost >= TimeSpan.FromHours(8))
+                {
+                    optmA = new Act(optmA.from, destination, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                }
+                possbileAct.Add(optmA);
+                
             }
 
             if (possbileAct.Count == 0)
@@ -414,9 +448,19 @@ namespace travel
                 Resort r =(Resort) destination;
                 foreach (City city in r.CityNear)
                 {
-                    TimeSpan timecost = TimeSpan.FromHours(TravelPlan.Length(this.Location, city) / 90);
-                    possbileAct.Add(new Act(this.Location, city,1, timecost - TimeSpan.FromHours(8)));
+                   TimeSpan timecost = TimeSpan.FromHours(TravelPlan.Length(this.Location, city) / 90);
+                    //possbileAct.Add(new Act(this.Location, city,1, timecost - TimeSpan.FromHours(8)));
+                    var optmA = new Act(this.Location, city, 1, timecost - TimeSpan.FromHours(8));
 
+                    if (optmA.timecost >= TimeSpan.FromHours(8))
+                    {
+                        optmA = new Act(optmA.from, city, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                    }
+                    if (optmA.timecost >= TimeSpan.FromHours(8))
+                    {
+                        optmA = new Act(optmA.from, city, optmA.daypass + 1, optmA.timecost - TimeSpan.FromHours(8));
+                    }
+                    possbileAct.Add(optmA);
                 }
             //    possbileAct.Add(new Act(this.Location, this.Location, 1,new TimeSpan()));
             }

@@ -10,7 +10,7 @@ namespace travel
     {
         public class TSP
         {
-            double a = 0.99;
+            double a = 0.98;
             double t0 = 97;
             double tf = 3;
             double t = 97;
@@ -31,12 +31,12 @@ namespace travel
                     line = file.ReadLine();
                     int order;
                     routeNew[i] = i+1;
-                    //if (line != null)
-                    //{
-                    //    int.TryParse(line, out order);
-                    //    routeNew[i] =order ;
-                    //}
-                    
+                    if (line != null)
+                    {
+                        int.TryParse(line, out order);
+                        routeNew[i] = order;
+                    }
+
 
                 }
                 file.Close();
@@ -129,7 +129,7 @@ namespace travel
                   //  file.WriteLine( tp.currentState.ToString());
                     if (tp.currentState.day >= 16)
                     {
-                        E = E +9999999;
+                        E = E +999999999;
                     ///    return E;
                     }
                 }               
@@ -137,9 +137,13 @@ namespace travel
                 E +=tp.alldaypass;
                 // tp.showpastActs();
                 newTP = tp;
-               
-                //tp.showpastActs(file);
-                //file.Close();
+   ///      if(tp.alldaypass<350&&E< 22999999999)
+                {
+                    System.IO.StreamWriter file = new System.IO.StreamWriter("test"+E+".txt");
+
+                    tp.showpastActs(file);
+                    file.Close();
+                }
                 return E;
             }
         }

@@ -52,9 +52,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="cc.csv" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
+    <None Include="cca.csv" />
+    <None Include="ccl.csv" />
+    <None Include="nodelist.csv" />
     <None Include="rc.csv" />
+    <None Include="rca.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test53000000225.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

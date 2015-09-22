@@ -25,7 +25,7 @@ namespace travel
             ReadCityAll();
             BuildCity();
             ReadBuildResort();
-            Node root = cities[1];
+            Node root = cities[131];
             MakeNodeList( root,40);
             Console.WriteLine(AllNodesButRoot.Count);
             //var tp = new TravelPlan(cities[1]);
