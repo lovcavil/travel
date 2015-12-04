@@ -10,7 +10,7 @@ namespace travel
     {
         public class TSP
         {
-            double a = 0.99;
+            double a = 0.98;
             double t0 = 97;
             double tf = 3;
             double t = 97;
@@ -19,21 +19,35 @@ namespace travel
             int[] routeNew = new int[400];
             int[] routeCur = new int[400];
             int[] routeBest = new int[400];
+            public static TravelPlan bestTP;
+            public static TravelPlan newTP;
             public void Run(Node root)
             {
-                for (int i =0; i < allnodecount; i++)
+                string line;
+                System.IO.StreamReader file = new System.IO.StreamReader(@"nodelist.csv");
+                
+                    for (int i =0; i < allnodecount; i++)
                 {
+                    line = file.ReadLine();
+                    int order;
                     routeNew[i] = i+1;
+                    if (line != null)
+                    {
+                        int.TryParse(line, out order);
+                        routeNew[i] = order;
+                    }
+
 
                 }
+                file.Close();
                 routeNew[0] = root.id;///roooooot swap 
 
                 routeNew.CopyTo(routeCur, 0);
                 routeNew.CopyTo(routeBest, 0);
                 Random rand = new Random();
-                int Ecurrent = 999999999;
-                int Ebest =999999999;
-                int Enew = 999999999;
+                long Ecurrent = 999999999999;
+                long Ebest =999999999999;
+                long Enew = 999999999999;
                 while (t > tf)
                 {
 
@@ -67,7 +81,8 @@ namespace travel
                                 Ebest = Enew;
                                 routeNew.CopyTo(routeBest, 0);
                                 Console.WriteLine(Ebest);
-
+                                bestTP = newTP;
+                                
 
                             }
                         }
@@ -85,16 +100,18 @@ namespace travel
                         }
 
                     }
+                    Console.WriteLine(t);
                     t = t * a;
             }
                 Console.WriteLine(Ebest);
         }
 
-            public int totalTime(Node root)
+            public long totalTime(Node root)
             {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(@"test.txt");
-                int E =0;
+                
+                long E =0;
                 TravelPlan tp = new TravelPlan(root);
+                //System.IO.StreamWriter file = new System.IO.StreamWriter(@"test.txt");
                 for (int i = 1; i < AllNodesButRoot.Count&& AllNodesButRoot.ElementAt(routeNew[i]-1) !=null; i++)
                 {
                     var des = AllNodesButRoot.ElementAt(routeNew[i]-1);
@@ -108,18 +125,25 @@ namespace travel
 
                     }
                     tp.Travel(tp.currentState, des);
-                    file.WriteLine( tp.currentState.ToString());
+                    
+                  //  file.WriteLine( tp.currentState.ToString());
                     if (tp.currentState.day >= 16)
                     {
-                        E = E +9999;
+                        E = E +999999999;
+                    ///    return E;
                     }
                 }               
                 tp.Travel(tp.currentState, root);
                 E +=tp.alldaypass;
                 // tp.showpastActs();
-                
-                tp.showpastActs(file);
-                file.Close();
+                newTP = tp;
+   ///      if(tp.alldaypass<350&&E< 22999999999)
+                {
+                    System.IO.StreamWriter file = new System.IO.StreamWriter("test"+E+".txt");
+
+                    tp.showpastActs(file);
+                    file.Close();
+                }
                 return E;
             }
         }

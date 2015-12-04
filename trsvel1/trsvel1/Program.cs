@@ -10,21 +10,23 @@ namespace travel
 {
     partial class Program
     {
-        public static string[] Name = new string[300];
+        public static string[] Name = new string[500];
+        public static int[] isBig = new int[300];
         public static City[] cities = new City[200];
         public static double[,] AdjectionArray= new double[200,200];
         public static Resort[] resorts = new Resort[300];
 
         static int Idcount = 0;
         public static List<Node> AllNodesButRoot = new List<Node>();
-
+        //        public static List<Act> bestAct = new List<Act>();
+        public static TravelPlan bestTP;
         static void Main(string[] args)
         {
-            ReadCity();
+            ReadCityAll();
             BuildCity();
             ReadBuildResort();
-            Node root = cities[1];
-            MakeNodeList( root);
+            Node root = cities[131];
+            MakeNodeList( root,40);
             Console.WriteLine(AllNodesButRoot.Count);
             //var tp = new TravelPlan(cities[1]);
             //tp.Travel(tp.currentState, AllNodesButRoot.ElementAt(0));
@@ -33,15 +35,64 @@ namespace travel
 
             TSP tsp = new TSP();
             tsp.Run(root);
-
+            
 
             ;
         }
 
-        
 
+        static public void ReadCityAll()
+        {
+            int counter = 1;
+            string line;
+            System.IO.StreamReader file = new System.IO.StreamReader(@"ccl.csv");
+            while ((line = file.ReadLine()) != null)
+            {
+                System.Console.WriteLine(line);
+                string[] array;
+                string[] separator = { "," };
+                array = line.Split(separator, StringSplitOptions.None);
+                Name[counter] = array[0];
+                int i = 0;
+                int.TryParse(array[1], out i);
+                isBig[counter] = i;
+                counter++;
+            }
+            file.Close();
+            for(int i=1;i< counter; i++)
+            {
+                for (int j = 1; j < counter; j++)
+                {
+                    if (i == j)
+                    {
+                        AdjectionArray[i, j] = 0;
+                    }
+                    else
+                    {
+                        AdjectionArray[i, j] = 9999;
+                    }
+                }
+            }
+            file = new System.IO.StreamReader(@"cca.csv");
+            var namelist = new List<string>();
+            namelist = Name.ToList();
+            while ((line = file.ReadLine()) != null)
+            {
+                System.Console.WriteLine(line);
+                string[] array;
+                string[] separator = { "," };
+                array = line.Split(separator, StringSplitOptions.None);
+                int i = namelist.IndexOf(array[0]);
+                int j = namelist.IndexOf(array[1]);
+                double d = 9998;
+                double.TryParse(array[2], out d);
+                AdjectionArray[i, j] = d;
+                AdjectionArray[j, i] = d;
 
+            }
+            file.Close();
 
+        }
 
         static public void ReadCity()
         {
@@ -83,24 +134,24 @@ namespace travel
         }
         static public void BuildCity()
         {
-            int i = 1;
+            int i = 1;int all = 1;
             foreach(string cityName in Name)
             {
                 
                 if (cityName != null)
                 {
-                    cities[i] = new City(i,Name[i],false);
-                    i = i + 1;
+                    cities[i] = new City(i,Name[i],(isBig[i])==1?true:false);
+                    i = i + 1;all++;
                 }
                 
             }
-            Idcount = i;
+            Idcount = all;
         }
         static public void ReadBuildResort()
         {
             int counter = 1;
             string line;
-            System.IO.StreamReader file = new System.IO.StreamReader(@"rc.csv");
+            System.IO.StreamReader file = new System.IO.StreamReader(@"rca.csv");
             while ((line = file.ReadLine()) != null)
             {
                 System.Console.WriteLine(line);
@@ -141,6 +192,9 @@ namespace travel
                         resorts[counter].CityNear.Add(cities[Array.LastIndexOf(Name, array[2])]);
                         double i = 0;
                         double.TryParse(array[3], out i);
+                        {
+                            i = 2;
+                        }
                         resorts[counter].CityNearTime.Add(TimeSpan.FromHours(i));
                     }
                     if (array[4] != "")
@@ -149,6 +203,9 @@ namespace travel
                         double i = 0;
                         if (double.TryParse(array[5], out i))
                         {
+                            {
+                                i = 2;
+                            }
                             resorts[counter].CityNearTime.Add(TimeSpan.FromHours(i ));
                         }
                     }
@@ -158,6 +215,10 @@ namespace travel
                         double i = 0;
                         if (double.TryParse(array[7], out i))
                         {
+                            if (i > 2)
+                            {
+                                i = 2;
+                            }
                             resorts[counter].CityNearTime.Add(TimeSpan.FromHours(i));
                         }
                     }
@@ -168,12 +229,12 @@ namespace travel
             }
             file.Close();
         }
-        public static void MakeNodeList(Node root)
+        public static void MakeNodeList(Node root,int DummyCount)
         {
             AllNodesButRoot.Clear();
             foreach (City c in cities)
             {
-                if (c != null && c.id != 0 && c.id != root.id)
+                if (c != null && c.id != 0 && c.id != root.id&& c.isLarge==true )
                 {
                     AllNodesButRoot.Add(c);
                 }
@@ -185,7 +246,7 @@ namespace travel
                     AllNodesButRoot.Add(r);
                 }
             }
-            for(int i = 1; i <= 1; i++)
+            for(int i = 1; i <= DummyCount; i++)
             {
                 City dummy = new City();
                 //          dummy.id = AllNodesButRoot.Count + 1+i;
