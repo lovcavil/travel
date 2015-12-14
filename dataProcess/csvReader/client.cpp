@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "csvReader.h"
+#include "myMath.h"
 int main()
 {	
 	double row[10];
@@ -10,6 +11,7 @@ int main()
 	double data[100];
 	int len;
 	csv::read("test.csv", row, column, data,&len);
+	myMath::test(data);
     return 0;
 }
 

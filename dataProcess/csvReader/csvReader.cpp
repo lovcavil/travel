@@ -13,7 +13,7 @@ csv::~csv()
 {
 }
 
-void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenDataPerRow)
+void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenPerRow)
 {
 	const char* split = ",";	
 	string readLine;
@@ -37,7 +37,7 @@ void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenDa
 				if (ctrColumn != 0){
 					*(ptc+ ctrColumn-1) = atof(c_split);
 					lenColumn = ctrColumn;
-					*lenDataPerRow = lenColumn;
+					*lenPerRow = lenColumn;
 				}	
 			}
 			else
