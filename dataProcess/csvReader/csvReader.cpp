@@ -13,12 +13,12 @@ csv::~csv()
 {
 }
 
-void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenPerRow)
+void csv::csv(string fileName, double* ptr, double* ptc, double* ptd, int* lenRow)
 {
-	const char* split = ",";	
+	const char* split = ",";
 	string readLine;
-	int ctrRow=0;
-	int ctrColumn = 0;int lenColumn;
+	int ctrRow = 0;
+	int ctrColumn = 0; int lenColumn;
 	fstream fin(fileName); //打开文件
 	while (getline(fin, readLine)) //逐行读取，直到结束
 	{
@@ -26,23 +26,23 @@ void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenPe
 		int len = readLine.length();
 		c_readLine = (char *)malloc((len + 1)*sizeof(char));
 		//readLine._Copy_s(c_readLine, len, 0);
-		strcpy_s(c_readLine, len+1, readLine.c_str());
-		char *next_token=NULL;
+		strcpy_s(c_readLine, len + 1, readLine.c_str());
+		char *next_token = NULL;
 		char* c_split = strtok_s(c_readLine, split, &next_token);
 		double rTitle;
-		double cTitle;		
+		double cTitle;
 		while (c_split != NULL) {
 			printf("%s\n", c_split);
 			if (ctrRow == 0) {
-				if (ctrColumn != 0){
-					*(ptc+ ctrColumn-1) = atof(c_split);
+				if (ctrColumn != 0) {
+					*(ptc + ctrColumn - 1) = atof(c_split);
 					lenColumn = ctrColumn;
 					*lenPerRow = lenColumn;
-				}	
+				}
 			}
 			else
 			{
-				if (ctrColumn == 0){
+				if (ctrColumn == 0) {
 					*(ptr + ctrRow - 1) = atof(c_split);
 				}
 				else
