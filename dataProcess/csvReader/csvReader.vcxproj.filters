@@ -45,4 +45,8 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="in.csv" />
+    <None Include="test.csv" />
+  </ItemGroup>
 </Project>

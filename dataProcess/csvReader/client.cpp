@@ -6,11 +6,17 @@
 #include "myMath.h"
 int main()
 {	
-	double row[10];
-	double column[10];
-	double data[100];
-	int len;
-	csv::read("test.csv", row, column, data,&len);
+	double row[100];
+	double column[100];
+	double data[10000];
+	const int division = 16;
+	int lenRow;
+	int lenColumn;
+	int rowSection[100];
+	int columnSection[100];
+	csv::read("in.csv", row, column, data,&lenRow,&lenColumn);
+	myMath::sector(row, rowSection, lenRow, division);
+	myMath::sector(column, columnSection, lenColumn, division);
 	myMath::test(data);
     return 0;
 }
