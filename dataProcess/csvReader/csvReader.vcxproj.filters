@@ -30,6 +30,9 @@
     <ClInclude Include="myMath.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -46,7 +49,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="in.csv" />
     <None Include="test.csv" />
+    <None Include="aaa.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="in.csv" />
   </ItemGroup>
 </Project>
