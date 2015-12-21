@@ -42,6 +42,12 @@ int main()
 	int count;
 	csv::read("aaa.csv", row, column, data, &lenRow, &lenColumn);
 	myMath::rf(data, lenColumn, mean, range, &count);
+	ofstream fout;
+	fout.open("file.csv", ios::out);
+	for (int i = 1; i <= count; i++) {
+		fout << mean[i] << "," << range[i] << endl;
+	}
+	fout.close();
     return 0;
 }
 
