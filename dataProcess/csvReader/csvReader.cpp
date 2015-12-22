@@ -13,17 +13,17 @@ csv::~csv()
 {
 }
 
-void csv::read(string fileName, double* ptr, double* ptc, double* ptd,int* lenRow,int* lenColumn)
+void csv::read(string fileName, double* ptr, double* ptc, double* ptd,long* lenRow,long* lenColumn)
 {
 	const char* split = ",";	
 	string readLine;
-	int ctrRow=0;
-	int ctrColumn = 0;
+	long ctrRow=0;
+	long ctrColumn = 0;
 	fstream fin(fileName); //打开文件
 	while (getline(fin, readLine)) //逐行读取，直到结束
 	{
 		char *c_readLine;
-		int len = readLine.length();
+		long len = readLine.length();
 		c_readLine = (char *)malloc((len + 1)*sizeof(char));
 		strcpy_s(c_readLine, len+1, readLine.c_str());
 		char *next_token=NULL;

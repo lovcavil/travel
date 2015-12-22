@@ -10,8 +10,8 @@ void test() {
 	double column[100];
 	double data[10000];
 	const int division = 16;
-	int lenRow;
-	int lenColumn;
+	long lenRow;
+	long lenColumn;
 	int rowSection[100];
 	int columnSection[100];
 	csv::read("in.csv", row, column, data, &lenRow, &lenColumn);
@@ -23,8 +23,8 @@ void test2() {
 	double row[100];
 	double column[100];
 	double data[10000];
-	int lenRow;
-	int lenColumn;
+	long lenRow;
+	long lenColumn;
 	int rowSection[100];
 	int columnSection[100];
 	csv::read("in.csv", row, column, data, &lenRow, &lenColumn);
@@ -32,19 +32,21 @@ void test2() {
 int main()
 {	
 	//void test();
-	double row[20000];
-	double column[100];
-	double data[20000];
-	int lenRow;
-	int lenColumn;
-	double mean[20000];
-	double range[20000];
-	int count;
-	csv::read("aaa.csv", row, column, data, &lenRow, &lenColumn);
+#define BASE 80000l
+	double* row, *column, *data, *mean, *range;
+	row=new double[BASE];
+	column = new double[BASE];
+	data = new double[BASE];
+	long lenRow;
+	long lenColumn;
+	mean = new double[BASE];
+	range = new double[BASE];
+	long count;
+	csv::read("fx.csv", row, column, data, &lenRow, &lenColumn);
 	myMath::rf(data, lenColumn, mean, range, &count);
 	ofstream fout;
 	fout.open("file.csv", ios::out);
-	for (int i = 1; i <= count; i++) {
+	for (long i = 1; i <= count; i++) {
 		fout << mean[i] << "," << range[i] << endl;
 	}
 	fout.close();

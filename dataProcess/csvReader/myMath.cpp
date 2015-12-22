@@ -46,11 +46,11 @@ int* myMath::sector(double* data, int* section,int len,int division)
 }
 
 
-void myMath::rf(double* source, int len, double* mean, double* range, int* rfcount)
+void myMath::rf(double* source, long len, double* mean, double* range, long* rfcount)
 {
-	int count = 1;
-	int current = 1;
-	int target;
+	long count = 1;
+	long current = 1;
+	long target;
 	int direction = (*(source + 1) - *source) ==0? 1 : ((*(source + 1) - *source) / abs(*(source + 1) - *source));
 	target = pvSearch(source,1,len,direction);
 	while (current < len) {
@@ -67,10 +67,10 @@ void myMath::rf(double* source, int len, double* mean, double* range, int* rfcou
 }
 
 
-int myMath::pvSearch(double* source,int start, int end ,int direction)
+int myMath::pvSearch(double* source,long start, long end ,int direction)
 {
 	
-	for (int c = start; c < end; c++) {
+	for (long c = start; c < end; c++) {
 		bool t = (*(source + c) - *(source + c-1 ))*direction < 0;//fanxiang
 		if (t) {
 			return(c);
