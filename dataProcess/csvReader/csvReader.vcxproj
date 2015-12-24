@@ -152,7 +152,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="client.cpp" />
+    <ClCompile Include="0.client.cpp" />
     <ClCompile Include="csvReader.cpp" />
     <ClCompile Include="myMath.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -170,6 +170,13 @@
       <DeploymentContent>false</DeploymentContent>
     </CustomBuild>
     <None Include="aaa.csv" />
+    <None Include="csv.ini" />
+    <None Include="source\fx.asc" />
+    <None Include="source\fy.asc" />
+    <None Include="source\fz.asc" />
+    <None Include="source\tx.asc" />
+    <None Include="source\ty.asc" />
+    <None Include="source\tz.asc" />
     <None Include="test.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

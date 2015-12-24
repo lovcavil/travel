@@ -31,7 +31,7 @@ void csv::read(string fileName, double* ptr, double* ptc, double* ptd,long* lenR
 		double rTitle;
 		double cTitle;		
 		while (c_split != NULL) {
-			printf("%s\n", c_split);
+//			printf("%s\n", c_split);
 			if (ctrRow == 0) {
 				if (ctrColumn != 0){
 					*(ptc+ ctrColumn-1) = atof(c_split);

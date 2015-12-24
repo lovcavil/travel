@@ -29,12 +29,11 @@ void test2() {
 	int columnSection[100];
 	csv::read("in.csv", row, column, data, &lenRow, &lenColumn);
 }
-int main()
-{	
-	//void test();
+
 #define BASE 80000l
+void read(string filename) {
 	double* row, *column, *data, *mean, *range;
-	row=new double[BASE];
+	row = new double[BASE];
 	column = new double[BASE];
 	data = new double[BASE];
 	long lenRow;
@@ -42,14 +41,28 @@ int main()
 	mean = new double[BASE];
 	range = new double[BASE];
 	long count;
-	csv::read("fx.csv", row, column, data, &lenRow, &lenColumn);
+	csv::read(filename, row, column, data, &lenRow, &lenColumn);
 	myMath::rf(data, lenColumn, mean, range, &count);
 	ofstream fout;
-	fout.open("file.csv", ios::out);
-	for (long i = 1; i <= count; i++) {
-		fout << mean[i] << "," << range[i] << endl;
+	fout.open(filename+".csv", ios::out);
+	for (long i = 1; i < count; i++) {
+		fout << mean[i-1] << "," << range[i-1] << endl;
 	}
 	fout.close();
+}
+int main()
+{	
+	string readLine;
+	
+	fstream fin("csv.ini"); //打开文件
+	while (getline(fin, readLine)) //逐行读取，直到结束
+	{
+		read("source\\"+readLine);
+	}
+
+
+
+
     return 0;
 }
 

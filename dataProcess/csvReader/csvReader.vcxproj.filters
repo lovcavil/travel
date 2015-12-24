@@ -38,19 +38,40 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="client.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="csvReader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="myMath.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="0.client.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.csv" />
     <None Include="aaa.csv" />
+    <None Include="source\fy.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="source\fx.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="source\fz.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="source\tx.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="source\ty.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="source\tz.asc">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="csv.ini">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="in.csv" />
